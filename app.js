@@ -1,0 +1,71 @@
+"use strict";
+const moment = require("moment");
+const express = require("express"),
+    oauthserver = require("express-oauth-server"),
+    bodyParser = require("body-parser");
+const ControllerFile = require("./api/controllers/file_controller");
+const ControllerSe = require("./api/controllers/se_controller");
+const ControllerAccount = require("./api/controllers/account_controller");
+const tokenValidTime = {accessTokenLifetime: 7 * 24 * 60 * 60,refreshTokenLifetime: 7 * 24 * 60 * 60 * 1.5};
+
+var app = express();
+app.use(bodyParser.json({limit:'100mb'}));
+app.use(bodyParser.urlencoded({limit:'100mb',extended:true}));
+app.enable('trust proxy');//防止ip代理
+/**
+ * enable session
+ * 用于`找回密码`相关逻辑
+ * 假设找回密码时还没有`access token`
+ */
+const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const prepare = require('./api/domain/se.prepare');
+
+app.use(session({
+    store: new RedisStore({
+        client: prepare.redis
+    }),
+    secret: ["dwwy&^%#v", "S@#^k*(&ewyv"],
+    resave: false,
+    cookie: {
+        maxAge: 7 * 86400 * 1000
+    }
+}));
+
+app.use(function(req, res, next){
+  let method = req.method,
+      url = req.originalUrl,
+      ip = req.ip;
+      console.log(`\n\nStarted ${method} ${url} for ${ip} at ${ moment(new Date()).format('YYYY-MM-DD hh:mm:ss')}`);
+      next();
+});
+//静态目录
+app.use("/se/upload",express.static(path.join(__dirname,"./upload")));
+
+app.oauth = new oauthserver({
+    model: require('./api/models/oauth2.model')
+});
+
+// account
+app.get('/se/account/login', app.oauth.token(tokenValidTime));
+app.post('/se/account/refresh', app.oauth.token(tokenValidTime));//token refresh
+app.get('/se/account/register', ControllerAccount.Register);
+app.get('/se/account/fogetpass', ControllerAccount.Fogetpass);
+app.get('/se/account/dobi/detailed', ControllerAccount.getAccountDetial);
+
+//-- se
+app.post('/se/file/upload', ControllerFile.uploadFile);
+app.get('/se/goods/list', ControllerSe.getGoodsList);
+app.post('/se/goods/create', ControllerSe.createGoods);
+app.get('/se/goods/list/item', ControllerSe.getGoodsItem);
+app.get('/se/goods/list/item/private', ControllerSe.getGoodsItemPrivate);
+
+
+//-- authed end
+
+var port = process.env.PORT || 8100;
+app.listen(port);
+// require('./api/controllers/twDistribution');
+console.log(`listen the port: ${port}`);
+
+module.exports = app;
