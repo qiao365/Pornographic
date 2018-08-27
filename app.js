@@ -48,11 +48,11 @@ app.post('/se/account/fogetpass', ControllerAccount.Fogetpass);
 app.get('/se/account/dobi/detailed', app.oauth.authenticate(), ControllerAccount.getAccountDetial);
 
 //-- se
-app.get('/se/goods/list', ControllerSe.getGoodsList);
-app.get('/se/goods/list/item', ControllerSe.getGoodsItem);
+app.get('/se/goods/list/:curPage/:limit', ControllerSe.getGoodsList);
 ControllerFile.uploadFile(app);//上传图片
 app.post('/se/goods/create', app.oauth.authenticate(), ControllerSe.createGoods);
-app.get('/se/goods/list/item/private', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivate);
+app.get('/se/goods/list/item/private/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivate);
+app.get('/se/goods/list/item/private/bybuy/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivateByBuy);
 
 
 //-- authed end

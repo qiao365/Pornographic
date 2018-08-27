@@ -3,6 +3,9 @@ const IP2Region = require('ip2region');
 const sequelize = require('../domain/se.prepare').sequelize;
 const TABLE_DEFINE = require("../domain/table.define");
 const DomainGoods = TABLE_DEFINE.DomainGoods;
+const DomainUser = TABLE_DEFINE.DomainUser;
+const DomainOrderList = TABLE_DEFINE.DomainOrderList;
+const Contants = require('../utils/Contants');
 const DomainGoodsDetails = TABLE_DEFINE.DomainGoodsDetails;
 var ModelSe = module.exports;
 
@@ -10,10 +13,105 @@ var ModelSe = module.exports;
  * 获取 GOODS LIST
  */
 ModelSe.getGoodsList = function getGoodsList(req,res) {
-    return DomainGoods.findAll().then(allbox=>{
-        
+    let curPage = req.params.curPage;
+    let limit = req.params.limit;
+    return DomainGoods.findAndCount({
+        order:[
+            ["clicks","DESC"]
+        ],
+        limit:limit,
+        offset: (curPage - 1) * limit
+    }).then(result=>{
+        let allGoods = result.rows,
+            count = result.count.length;
+        return  {list: allGoods, total: Math.ceil(count/limit), count: count};
     });
 };
+
+ModelSe.getGoodsItemPrivate = function getGoodsItemPrivate(req,res){
+    let id = req.params.id;
+    let user = res.locals.oauth.token.user;
+    return DomainOrderList.findOne({
+        where:{
+            goodsId:id,
+            userId:user.id
+        }
+    }).then(order=>{
+        if(order){
+            return DomainGoodsDetails.findOne({
+                where:{
+                    id:id
+                }
+            }).then(details=>{
+                return {
+                    isSuccess:true,
+                    message:details,
+                };
+            });
+        } else  return DomainUser.findOne({
+            where:{
+                id:user.id
+            }
+        }).then(account=>{
+            return {
+                isSuccess:false,
+                message:'请购买',
+                do3Fei:Contants.do3Fei,
+                balance:account.balance
+            };
+        });
+    });
+}
+
+ModelSe.getGoodsItemPrivateByBuy = function getGoodsItemPrivateByBuy(req,res){
+    let id = req.params.id;
+    let user = res.locals.oauth.token.user;
+    return DomainOrderList.findOne({
+        where:{
+            goodsId:id,
+            userId:user.id
+        }
+    }).then(order=>{
+        if(order){
+            return true;
+        } else  return DomainUser.findOne({
+            where:{
+                id:user.id
+            }
+        }).then(account=>{
+            if(account.balance >= Contants.do3Fei){
+                return account.increment({balance:-Contants.do3Fei}).then(()=>{
+                    return DomainOrderList.create({
+                        goodsId:id,
+                        userId:account.id,
+                        fei:Contants.do3Fei,
+                        status:'ok'
+                    }).then(()=>{
+                        return true;
+                    });
+                });
+            }else  return false;
+        });
+    }).then(msg=>{
+        if(msg){
+            return DomainGoodsDetails.findOne({
+                where:{
+                    id:id
+                }
+            }).then(details=>{
+                return {
+                    isSuccess:true,
+                    message:details,
+                };
+            });
+        }else{
+            return {
+                isSuccess:false,
+                message:'余额不足'
+            };
+        }
+    });
+}
 
 ModelSe.createGoods = function createGoods(req,res) {
     let body = req.body;

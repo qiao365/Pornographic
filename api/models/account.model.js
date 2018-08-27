@@ -3,7 +3,9 @@
 const sequelize = require('../domain/se.prepare').sequelize;
 const Table = require('../domain/table.define');
 const DomainUser = Table.DomainUser;
+const redis = require('../domain/se.prepare').redis;
 const DomainDoAddress = Table.DomainDoAddress;
+const KEYS = require('../models/oauth2.model').KEYS;
 var ModelAccount = module.exports;
 
 ModelAccount.getAccountDetial = function getAccountDetial(req,res){
@@ -50,7 +52,6 @@ ModelAccount.getAccountDetial = function getAccountDetial(req,res){
                     return account.update({
                             addressId:address.id
                     },{transaction: trans}).then(updateAcc=>{
-                        trans.commit();
                         return {
                             isSuccess:true,
                             message:address.address,
@@ -95,7 +96,8 @@ ModelAccount.Register = function Register(req,res){
         if(!findOne){
             let user = {
                 account:body.account,
-                password:body.password
+                password:body.password,
+                tip:body.tip
             };
             return DomainUser.create(body).then(createUser=>{
                 let key = `${KEYS.user}${createUser.account}`;

@@ -58,7 +58,8 @@ model.DomainUser = sequelize.define("t_do_user", {
     },
     balance: {
         type: Sequelize.INTEGER,
-        field: "balance"
+        field: "balance",
+        defaultValue:0
     },
     addressId:{
         type: Sequelize.INTEGER,

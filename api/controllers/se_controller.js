@@ -32,8 +32,8 @@ ControllerSe.createGoods = function createGoods(req, res){
     });
 };
 
-ControllerSe.getGoodsItem = function getGoodsItem(req, res){
-    ModelSe.getGoodsList(req, res).then((data)=>{
+ControllerSe.getGoodsItemPrivate = function getGoodsItemPrivate(req, res){
+    ModelSe.getGoodsItemPrivate(req, res).then((data)=>{
         res.status(200);
         res.json(data);
     }).catch((error) => {
@@ -43,8 +43,9 @@ ControllerSe.getGoodsItem = function getGoodsItem(req, res){
     });
 };
 
-ControllerSe.getGoodsItemPrivate = function getGoodsItemPrivate(req, res){
-    ModelSe.getGoodsList(req, res).then((data)=>{
+
+ControllerSe.getGoodsItemPrivateByBuy = function getGoodsItemPrivateByBuy(req, res){
+    ModelSe.getGoodsItemPrivateByBuy(req, res).then((data)=>{
         res.status(200);
         res.json(data);
     }).catch((error) => {
