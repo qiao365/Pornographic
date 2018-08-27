@@ -5,6 +5,7 @@ const Table = require('../domain/table.define');
 const DomainUser = Table.DomainUser;
 const redis = require('../domain/se.prepare').redis;
 const DomainDoAddress = Table.DomainDoAddress;
+const svgCaptcha = require('svg-captcha');
 const KEYS = require('../models/oauth2.model').KEYS;
 var ModelAccount = module.exports;
 
@@ -81,6 +82,14 @@ ModelAccount.Fogetpass = function Fogetpass(req,res){
 
 ModelAccount.Register = function Register(req,res){
    let body = req.body;
+   let captcha = req.session && req.session.captcha;
+   if(!captcha || body.captcha != captcha){
+        return Promise.resolve({
+            isSuccess:false,
+            message:"验证码错误",
+            code:1003
+        });
+   }
    if(!body.account || !body.password || body.password.length < 6){
        return Promise.resolve({
             isSuccess:false,
@@ -118,5 +127,31 @@ ModelAccount.Register = function Register(req,res){
     });
 };
 
+ModelAccount.getCaptcha = function getCaptcha(req,res){
+    let opt = {
+        size:3,
+        ignoreChars: '0o1i', // 验证码字符中排除 0o1i
+        noise: 2, // 干扰线条的数量
+        color: true, // 验证码的字符是否有颜色，默认没有，如果设定了背景，则默认有
+        background: '#ffffff' // 验证码图片背景颜色
+    };
+    var captcha = svgCaptcha.createMathExpr(opt);   
+    console.log(captcha.text);
+    req.session.captcha = captcha.text;
+	res.type('svg'); // 使用ejs等模板时如果报错 res.type('html')
+	res.status(200).send(captcha.data); 
+}
+
+ModelAccount.verify = function verify(req,res,next){
+    let body = req.body;
+    let captcha = req.session && req.session.captcha;
+   if(!captcha || body.captcha != captcha){
+    res.status(200).send({
+        isSuccess:false,
+        message:"验证码错误",
+        code:1003
+    });
+   }else next();
+}
 
 module.exports = ModelAccount;

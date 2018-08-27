@@ -37,4 +37,13 @@ ControllerAccount.Fogetpass = function Fogetpass(req, res){
     });
 };
 
+ControllerAccount.getCaptcha = function getCaptcha(req, res){
+    ModelAccount.getCaptcha(req, res);
+};
+
+ControllerAccount.verify = function verify(req, res, next){
+    ModelAccount.verify(req, res, next);
+};
+
+
 module.exports = ControllerAccount;

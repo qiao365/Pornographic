@@ -41,11 +41,12 @@ app.oauth = new oauthserver({
 });
 
 // account
-app.post('/se/account/login', app.oauth.token(tokenValidTime));
+app.post('/se/account/login', ControllerAccount.verify, app.oauth.token(tokenValidTime));
 app.post('/se/account/refresh', app.oauth.token(tokenValidTime));//token refresh
 app.post('/se/account/register', ControllerAccount.Register);
 app.post('/se/account/fogetpass', ControllerAccount.Fogetpass);
 app.get('/se/account/dobi/detailed', app.oauth.authenticate(), ControllerAccount.getAccountDetial);
+app.get('/se/account/recaptcha/captcha.svg', ControllerAccount.getCaptcha);
 
 //-- se
 app.get('/se/goods/list/:curPage/:limit', ControllerSe.getGoodsList);
