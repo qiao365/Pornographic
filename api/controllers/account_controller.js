@@ -15,19 +15,8 @@ ControllerAccount.getAccountDetial = function getAccountDetial(req, res){
     });
 };
 
-ControllerAccount.Login = function Login(req, res){
-    ModelAccount.getAccountDetial(req, res).then((data)=>{
-        res.status(200);
-        res.json(data);
-    }).catch((error) => {
-        console.error(error);
-        res.status(500);
-        res.json("error");
-    });
-};
-
 ControllerAccount.Register = function Register(req, res){
-    ModelAccount.getAccountDetial(req, res).then((data)=>{
+    ModelAccount.Register(req, res).then((data)=>{
         res.status(200);
         res.json(data);
     }).catch((error) => {
@@ -38,7 +27,7 @@ ControllerAccount.Register = function Register(req, res){
 };
 
 ControllerAccount.Fogetpass = function Fogetpass(req, res){
-    ModelAccount.getAccountDetial(req, res).then((data)=>{
+    ModelAccount.Fogetpass(req, res).then((data)=>{
         res.status(200);
         res.json(data);
     }).catch((error) => {

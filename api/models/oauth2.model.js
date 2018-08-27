@@ -84,6 +84,7 @@ model.getRefreshToken = function(bearerToken) {
         return undefined;
     });
 };
+
 model.revokeToken = function(token){
     console.log("revokeToken");
     console.log(token);
@@ -100,6 +101,7 @@ model.getUser = function(username, password) {
         if (!user || password !== user.password) {
             return undefined;
         }
+        console.log('getUser:'+user);
         return {
             id: user.username,
             accountId: user.accountId

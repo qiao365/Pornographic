@@ -1,12 +1,120 @@
 "use strict";
-const IP2Region = require('ip2region');
-const sequelize = require('../domain/se.prepare').sequelize;
-const moment = require('moment');
 
+const sequelize = require('../domain/se.prepare').sequelize;
+const Table = require('../domain/table.define');
+const DomainUser = Table.DomainUser;
+const DomainDoAddress = Table.DomainDoAddress;
 var ModelAccount = module.exports;
 
 ModelAccount.getAccountDetial = function getAccountDetial(req,res){
-   
+   let user = res.locals.oauth.token.user;
+    return DomainUser.findOne({
+        where:{
+            id:user.id
+        }
+    }).then(account=>{
+        if(account.addressId){
+            return DomainDoAddress.findOne({
+                where:{
+                    id:account.addressId,
+                    account:account.account
+                }
+            }).then(address=>{
+                return {
+                    isSuccess:true,
+                    message:address.address,
+                    code:10000
+                };
+            });
+        }
+        return sequelize.transaction((trans) => {
+            return DomainDoAddress.findOne({
+                where:{
+                    used:false
+                },
+                order:[
+                    ['id', 'ASC']
+                ]
+            }).then(address=>{
+                if(!address){
+                    return {
+                        isSuccess:false,
+                        message:"地址池不足，请联系管理员",
+                        code:10001
+                    };
+                }
+                return address.update({
+                        used:true,
+                        account:account.account
+                },{transaction: trans}).then(update=>{
+                    return account.update({
+                            addressId:address.id
+                    },{transaction: trans}).then(updateAcc=>{
+                        trans.commit();
+                        return {
+                            isSuccess:true,
+                            message:address.address,
+                            code:10000
+                        };
+                    });
+                });
+            });
+        });
+    });
 };
+
+ModelAccount.Fogetpass = function Fogetpass(req,res){
+    let body = req.body;
+    return DomainUser.findOne({
+        where:{
+            account:body.account
+        }
+    }).then(account=>{
+        return {
+            isSuccess:true,
+            message:account.tip ? account.tip : 'no',
+            code:1001
+        };
+    });
+};
+
+ModelAccount.Register = function Register(req,res){
+   let body = req.body;
+   if(!body.account || !body.password || body.password.length < 6){
+       return Promise.resolve({
+            isSuccess:false,
+            message:"密码格式错误",
+            code:1000
+       });
+   }
+    return DomainUser.findOne({
+        where:{
+            account:body.account
+        }
+    }).then(findOne=>{
+        if(!findOne){
+            let user = {
+                account:body.account,
+                password:body.password
+            };
+            return DomainUser.create(body).then(createUser=>{
+                let key = `${KEYS.user}${createUser.account}`;
+                user.id = createUser.id;
+                return redis.hmsetAsync(key, user).then(redis=>{
+                    return {
+                        isSuccess:true,
+                        message:"注册成功",
+                        code:1001
+                    };
+                });
+            });
+        }else  return {
+            isSuccess:false,
+            message:"已被注册",
+            code:1002
+        };
+    });
+};
+
 
 module.exports = ModelAccount;

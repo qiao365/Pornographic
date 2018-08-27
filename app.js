@@ -41,18 +41,18 @@ app.oauth = new oauthserver({
 });
 
 // account
-app.get('/se/account/login', app.oauth.token(tokenValidTime));
+app.post('/se/account/login', app.oauth.token(tokenValidTime));
 app.post('/se/account/refresh', app.oauth.token(tokenValidTime));//token refresh
-app.get('/se/account/register', ControllerAccount.Register);
-app.get('/se/account/fogetpass', ControllerAccount.Fogetpass);
-app.get('/se/account/dobi/detailed', ControllerAccount.getAccountDetial);
+app.post('/se/account/register', ControllerAccount.Register);
+app.post('/se/account/fogetpass', ControllerAccount.Fogetpass);
+app.get('/se/account/dobi/detailed', app.oauth.authenticate(), ControllerAccount.getAccountDetial);
 
 //-- se
-app.post('/se/file/upload', ControllerFile.uploadFile);
 app.get('/se/goods/list', ControllerSe.getGoodsList);
-app.post('/se/goods/create', ControllerSe.createGoods);
 app.get('/se/goods/list/item', ControllerSe.getGoodsItem);
-app.get('/se/goods/list/item/private', ControllerSe.getGoodsItemPrivate);
+app.post('/se/file/upload', app.oauth.authenticate(), ControllerFile.uploadFile);
+app.post('/se/goods/create', app.oauth.authenticate(), ControllerSe.createGoods);
+app.get('/se/goods/list/item/private', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivate);
 
 
 //-- authed end
