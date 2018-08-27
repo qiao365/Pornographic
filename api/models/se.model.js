@@ -1,6 +1,6 @@
 "use strict";
 const IP2Region = require('ip2region');
-const sequelize = require('../domain/promoserver.prepare').sequelize;
+const sequelize = require('../domain/se.prepare').sequelize;
 const TABLE_DEFINE = require("../domain/table.define");
 const DomainGoods = TABLE_DEFINE.DomainGoods;
 const DomainGoodsDetails = TABLE_DEFINE.DomainGoodsDetails;

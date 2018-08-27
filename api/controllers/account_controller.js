@@ -2,6 +2,7 @@
 
 const ModelAccount = require("../models/account.model");
 
+var ControllerAccount = module.exports;
 
 ControllerAccount.getAccountDetial = function getAccountDetial(req, res){
     ModelAccount.getAccountDetial(req, res).then((data)=>{

@@ -11,7 +11,7 @@ const KEYS = {
     client: "clients:",
     refreshToken: "refresh_token:",
     grantTypes: ":grant_types",
-    user: "users:"
+    user: "userse:"
 };
 
 model.getAccessToken = function(bearerToken) {

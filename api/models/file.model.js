@@ -1,12 +1,12 @@
 "use strict";
-const IP2Region = require('ip2region');
-const sequelize = require('../domain/promoserver.prepare').sequelize;
-const TABLE_DEFINE = require("../domain/table.define");
 
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const moment = require('moment');
+const IP2Region = require('ip2region');
+const sequelize = require('../domain/se.prepare').sequelize;
+const TABLE_DEFINE = require("../domain/table.define");
 
 function mkdirs(dirname, callback) {  
     fs.exists(dirname, function (exists) {  

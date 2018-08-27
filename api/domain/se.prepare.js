@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize');
 
-const APP = "sesese";
+const APP = "qingyise";
 var sequelize = new Sequelize(APP, APP, `${APP}`, {
     host: "localhost",
     logging: false,

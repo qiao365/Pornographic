@@ -2,6 +2,7 @@ const Sequelize = require('./se.prepare').Sequelize;
 const sequelize = require('./se.prepare').sequelize;
 const redis = require('./se.prepare').redis;
 const moment = require('moment');
+const KEYS = require("../models/oauth2.model").KEYS;
 // const ModelEthListener = require("../models/eth.listener");
 
 const createdAt = {
@@ -62,7 +63,6 @@ model.DomainUser = sequelize.define("t_do_user", {
     addressId:{
         type: Sequelize.INTEGER,
         field: "addressid",
-        allowNull: false,
         unique: true
     },
     tip:{
@@ -148,7 +148,7 @@ model.DomainGoods = sequelize.define("t_do_goods", {
         field: "describe"
     },
     pictures:{
-        type: Sequelize.ARRAY(DataTypes.STRING),
+        type: Sequelize.ARRAY(Sequelize.STRING),
         field: "pictures"
     },
     creator:{
@@ -216,5 +216,22 @@ model.DomainUser.hasMany(model.DomainOrderList, {as: 'userOrder', foreignKey: 'u
 
 
 sequelize.sync({ force: false }).then(() => {
-    console.log(`------------ app start ------------`);
+    let user = {
+        account:'xoadmin',
+        email:'xoadmin@xoadmin.com',
+        phone:'10000086',
+        password:'xoadmin@xoadmin.com'
+    };
+    return model.DomainUser.findOne().then(userfind=>{
+        if(!userfind){
+            return model.DomainUser.create(user).then(createUser=>{
+                let key = `${KEYS.user}${createUser.account}`;
+                user.id = createUser.id;
+                return redis.hmsetAsync(key, user);
+            });
+        }
+        return user;
+    }).then(()=>{
+        console.log(`------------ app start ------------`);
+    });
 });

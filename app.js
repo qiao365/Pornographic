@@ -2,25 +2,19 @@
 const moment = require("moment");
 const express = require("express"),
     oauthserver = require("express-oauth-server"),
-    bodyParser = require("body-parser");
+    bodyParser = require("body-parser"),
+    path = require('path');
 const ControllerFile = require("./api/controllers/file_controller");
 const ControllerSe = require("./api/controllers/se_controller");
 const ControllerAccount = require("./api/controllers/account_controller");
 const tokenValidTime = {accessTokenLifetime: 7 * 24 * 60 * 60,refreshTokenLifetime: 7 * 24 * 60 * 60 * 1.5};
-
+const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const prepare = require('./api/domain/se.prepare');
 var app = express();
 app.use(bodyParser.json({limit:'100mb'}));
 app.use(bodyParser.urlencoded({limit:'100mb',extended:true}));
 app.enable('trust proxy');//防止ip代理
-/**
- * enable session
- * 用于`找回密码`相关逻辑
- * 假设找回密码时还没有`access token`
- */
-const session = require('express-session');
-const RedisStore = require('connect-redis')(session);
-const prepare = require('./api/domain/se.prepare');
-
 app.use(session({
     store: new RedisStore({
         client: prepare.redis
