@@ -50,7 +50,7 @@ app.get('/se/account/dobi/detailed', app.oauth.authenticate(), ControllerAccount
 //-- se
 app.get('/se/goods/list', ControllerSe.getGoodsList);
 app.get('/se/goods/list/item', ControllerSe.getGoodsItem);
-ControllerFile.uploadFile(app);
+ControllerFile.uploadFile(app);//上传图片
 app.post('/se/goods/create', app.oauth.authenticate(), ControllerSe.createGoods);
 app.get('/se/goods/list/item/private', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivate);
 

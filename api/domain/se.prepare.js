@@ -1,6 +1,8 @@
-var Sequelize = require('sequelize');
-
+const Sequelize = require('sequelize');
+const bluebird = require('bluebird');
+const redisdb = require('redis');
 const APP = "qingyise";
+const KEYS = require("../models/oauth2.model").KEYS;
 var sequelize = new Sequelize(APP, APP, `${APP}`, {
     host: "localhost",
     logging: false,
@@ -18,22 +20,13 @@ var sequelize = new Sequelize(APP, APP, `${APP}`, {
     timezone: '+08:00' //东八时区
 });
 
-var bluebird = require('bluebird');
-var redisdb = require('redis');
 var redis = redisdb.createClient();
 bluebird.promisifyAll(redisdb.RedisClient.prototype);
 bluebird.promisifyAll(redisdb.Multi.prototype);
-/**
-//如果时区不正确，则需要放开
-require('pg').types.setTypeParser(1114, stringValue => {
-    return new Date(stringValue + "+0000");
-    // e.g., UTC offset. Use any offset that you would like.
+redis.hmset(`${KEYS.client}${APP}`, {
+    clientId: APP,
+    clientSecret: 'gX1fBat3bV'
 });
- **/
-/**
-初始化数据
-**/
-
 const CONFIG = {
     rpcApi:'http://localhost:8545'
 };

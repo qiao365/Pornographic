@@ -44,7 +44,6 @@ model.getAccessToken = function(bearerToken) {
 
 model.getClient = function(clientId, clientSecret) {
     let key = `${KEYS.client}${clientId}`;
-    console.log(key);
     return db.hgetallAsync(key).then((client) => {
         if (!client || client.clientSecret !== clientSecret) return undefined;
         return {
@@ -57,7 +56,6 @@ model.getClient = function(clientId, clientSecret) {
 
 model.getRefreshToken = function(bearerToken) {
     console.log("getRefreshToken");
-    console.log(bearerToken);
     return db.hgetallAsync(`${KEYS.refreshToken}${bearerToken}`).then((token) => {
         if (!token) return undefined;
         console.log(token);
@@ -86,8 +84,6 @@ model.getRefreshToken = function(bearerToken) {
 };
 
 model.revokeToken = function(token){
-    console.log("revokeToken");
-    console.log(token);
     db.delAsync(`${KEYS.token}${token.accessToken}`);
     return db.delAsync(`${KEYS.refreshToken}${token.refreshToken}`).then((refreshed)=>{
         return !!refreshed;
@@ -101,10 +97,10 @@ model.getUser = function(username, password) {
         if (!user || password !== user.password) {
             return undefined;
         }
-        console.log('getUser:'+user);
+        // console.log('getUser:'+JSON.stringify(user));
         return {
-            id: user.username,
-            accountId: user.accountId
+            id: user.id,
+            account: user.account
         };
     });
 };
@@ -114,7 +110,6 @@ model.getUser = function(username, password) {
  */
 
 model.saveToken = function(token, client, user) {
-    console.log('saveToken');
     var data = {
         accessToken: token.accessToken,
         accessTokenExpiresAt: token.accessTokenExpiresAt,

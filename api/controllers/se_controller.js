@@ -22,7 +22,7 @@ ControllerSe.getGoodsList = function getGoodsList(req, res){
 
 
 ControllerSe.createGoods = function createGoods(req, res){
-    ModelSe.getGoodsList(req, res).then((data)=>{
+    ModelSe.createGoods(req, res).then((data)=>{
         res.status(200);
         res.json(data);
     }).catch((error) => {

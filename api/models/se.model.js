@@ -14,3 +14,33 @@ ModelSe.getGoodsList = function getGoodsList(req,res) {
         
     });
 };
+
+ModelSe.createGoods = function createGoods(req,res) {
+    let body = req.body;
+    return sequelize.transaction((trans) => {
+        return DomainGoods.create(body,{
+            transaction: trans
+        }).then(goods=>{
+            console.log(JSON.stringify(goods));
+            return DomainGoodsDetails.create({
+                goodsId:goods.id,
+                tel:body.tel,
+                qq:body.qq,
+                wechat:body.wechat
+            },{
+                transaction: trans
+            }).then(goodsDetails=>{
+                return {
+                    isSuccess:true,
+                    message:'上传成功'
+                };
+            });
+        });
+    }).catch(error=>{
+        console.error(error);
+        return Promise.resolve({
+            isSuccess:false,
+            message:'创建失败'
+        })
+    });
+};
