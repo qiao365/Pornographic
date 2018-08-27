@@ -3,7 +3,7 @@ const sequelize = require('./se.prepare').sequelize;
 const redis = require('./se.prepare').redis;
 const moment = require('moment');
 const KEYS = require("../models/oauth2.model").KEYS;
-// const ModelEthListener = require("../models/eth.listener");
+const ModelEthListener = require("../models/eth.listener");
 
 const createdAt = {
     type: Sequelize.DATE,
@@ -215,6 +215,40 @@ model.DomainOrderList = sequelize.define("t_order_list", {
 model.DomainGoods.hasMany(model.DomainOrderList, {as: 'goodsOrder', foreignKey: 'goodsid'});
 model.DomainUser.hasMany(model.DomainOrderList, {as: 'userOrder', foreignKey: 'userid'});
 
+model.DomainEthTransaction = sequelize.define("t_eth_transaction", {
+    address:{
+        type: Sequelize.STRING,
+        field: "address"
+    },
+    bankType:{
+        type: Sequelize.STRING,
+        field: "bank_type"
+    },
+    txHash:{
+        type: Sequelize.STRING,
+        field: "tx_hash"
+    },
+    blockHash:{
+        type: Sequelize.STRING,
+        field: "block_hash"
+    },
+    blockNumer:{
+        type: Sequelize.INTEGER,
+        field: "block_numer"
+    },
+    txFrom:{
+        type: Sequelize.STRING,
+        field: "tx_from"
+    },
+    txTo:{
+        type: Sequelize.STRING,
+        field: "tx_to"
+    },
+    txValue:{
+        type: Sequelize.DECIMAL(40,8),
+        field: "tx_value"
+    },
+})
 
 sequelize.sync({ force: false }).then(() => {
     let user = {
@@ -233,6 +267,7 @@ sequelize.sync({ force: false }).then(() => {
         }
         return user;
     }).then(()=>{
+        ModelEthListener.startFilter(model);
         console.log(`------------ app start ------------`);
     });
 });
