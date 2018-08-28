@@ -1,8 +1,9 @@
 ##数据
   * createuser -P qingyise -U postgres
   * createdb -O qingyise qingyise -U postgres
-##ip port
-192.168.1.25:8100
+  
+## ip port
+  *192.168.1.25:8100
 
 ##不需要登录
   * 1.图形验证码 get
