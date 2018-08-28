@@ -35,30 +35,31 @@ app.use(function(req, res, next){
       next();
 });
 //静态目录
-app.use("/se/upload",express.static(path.join(__dirname,"./upload")));
+app.use("/qingyi/upload",express.static(path.join(__dirname,"./upload")));
 
 app.oauth = new oauthserver({
     model: require('./api/models/oauth2.model')
 });
 
 // account
-app.post('/se/account/login', ControllerAccount.verify, app.oauth.token(tokenValidTime));
-app.post('/se/account/refresh', app.oauth.token(tokenValidTime));//token refresh
-app.post('/se/account/register', ControllerAccount.Register);
-app.post('/se/account/fogetpass', ControllerAccount.Fogetpass);
-app.get('/se/account/dobi/detailed', app.oauth.authenticate(), ControllerAccount.getAccountDetial);
-app.get('/se/account/recaptcha/captcha.svg', ControllerAccount.getCaptcha);
+app.post('/qingyi/account/login', ControllerAccount.verify, app.oauth.token(tokenValidTime));
+app.post('/qingyi/account/refresh', app.oauth.token(tokenValidTime));//token refresh
+app.post('/qingyi/account/register', ControllerAccount.Register);
+app.post('/qingyi/account/fogetpass', ControllerAccount.Fogetpass);
+app.get('/qingyi/account/dobi/detailed', app.oauth.authenticate(), ControllerAccount.getAccountDetial);
+app.get('/qingyi/account/recaptcha/captcha.svg', ControllerAccount.getCaptcha);
 
-app.get('/se/area/provinces', ControllerProvinces.getProvinces);//citys
+app.get('/qingyi/area/provinces', ControllerProvinces.getProvinces);//citys
 
 //-- se
-app.get('/se/get/citys/by/province/:province', ControllerSe.getCitys);
-app.get('/se/goods/list/:curPage/:limit', ControllerSe.getGoodsList);
-app.get('/se/goods/list/by/city/:city/:curPage/:limit', ControllerSe.getGoodsListByCity);
+app.get('/qingyi/get/citys/by/province/:province', ControllerSe.getCitys);
+app.get('/qingyi/goods/list/:curPage/:limit', ControllerSe.getGoodsList);
+app.get('/qingyi/goods/list/by/city/:city/:curPage/:limit', ControllerSe.getGoodsListByCity);
+app.get('/qingyi/goods/list/item/details/:id', ControllerSe.getGoodsItemDetails);
 ControllerFile.uploadFile(app);//上传图片
-app.post('/se/goods/create', app.oauth.authenticate(), ControllerSe.createGoods);
-app.get('/se/goods/list/item/private/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivate);
-app.get('/se/goods/list/item/private/bybuy/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivateByBuy);
+app.post('/qingyi/goods/create', app.oauth.authenticate(), ControllerSe.createGoods);
+app.get('/qingyi/goods/list/item/private/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivate);
+app.get('/qingyi/goods/list/item/private/bybuy/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivateByBuy);
 
 
 //-- authed end

@@ -92,6 +92,10 @@ model.DomainUser.belongsTo(model.DomainDoAddress, {as: 'address', foreignKey: 'a
 
 //goods list
 model.DomainGoods = sequelize.define("t_do_goods", {
+    title: {
+        type: Sequelize.STRING,
+        field: "title"
+    },
     name: {
         type: Sequelize.STRING,
         field: "name"

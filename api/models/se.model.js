@@ -45,6 +45,19 @@ ModelSe.getGoodsList = function getGoodsList(req,res) {
     });
 };
 
+ModelSe.getGoodsItemDetails = function getGoodsItemDetails(req,res) {
+    let id = req.params.id;
+    return DomainGoods.findOne({
+        where:{
+            id:id
+        }
+    }).then(goods=>{
+        return goods.increment({visitors:1}).then(()=>{
+            return goods;
+        });
+    });
+};
+
 ModelSe.getGoodsListByCity = function getGoodsListByCity(req,res) {
     let curPage = req.params.curPage;
     let limit = req.params.limit;
