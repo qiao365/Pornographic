@@ -7,6 +7,7 @@ const express = require("express"),
 const ControllerFile = require("./api/controllers/file_controller");
 const ControllerSe = require("./api/controllers/se_controller");
 const ControllerAccount = require("./api/controllers/account_controller");
+const ControllerProvinces = require("./api/controllers/provinces_controller");
 const tokenValidTime = {accessTokenLifetime: 7 * 24 * 60 * 60,refreshTokenLifetime: 7 * 24 * 60 * 60 * 1.5};
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
@@ -47,6 +48,8 @@ app.post('/se/account/register', ControllerAccount.Register);
 app.post('/se/account/fogetpass', ControllerAccount.Fogetpass);
 app.get('/se/account/dobi/detailed', app.oauth.authenticate(), ControllerAccount.getAccountDetial);
 app.get('/se/account/recaptcha/captcha.svg', ControllerAccount.getCaptcha);
+
+app.get('/se/area/provinces', ControllerProvinces.getProvinces);//citys
 
 //-- se
 app.get('/se/goods/list/:curPage/:limit', ControllerSe.getGoodsList);

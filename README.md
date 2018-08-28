@@ -16,12 +16,15 @@
   * se/account/register
   * body： account/password/tip/captcha
 
-   * 4.登录 post
-   * se/account/login
-   * header：
-   * Authorization：Basic cWluZ3lpc2U6Z1gxZkJhdDNiVg==
+  * 4.登录 post
+  * se/account/login
+  * header：
+  * Authorization：Basic cWluZ3lpc2U6Z1gxZkJhdDNiVg==
 
-   * body：username／password／grant_type=password／captcha
+  * body：username／password／grant_type=password／captcha
+
+  * 5. 省份／城市 get
+  * se/area/provinces
 
 ## 需要登录
    * 1.获取商品私密信息 get，购买则返回信息，无购买则返回提示信息
