@@ -33,11 +33,38 @@ ModelSe.getGoodsList = function getGoodsList(req,res) {
         order:[
             ["clicks","DESC"]
         ],
+        order:[
+            ["visitors","DESC"]
+        ],
         limit:limit,
         offset: (curPage - 1) * limit
     }).then(result=>{
         let allGoods = result.rows,
-            count = result.count.length;
+            count = result.count;
+        return  {list: allGoods, total: Math.ceil(count/limit), count: count};
+    });
+};
+
+ModelSe.getGoodsListByCity = function getGoodsListByCity(req,res) {
+    let curPage = req.params.curPage;
+    let limit = req.params.limit;
+    let city = req.params.city;
+    return DomainGoods.findAndCount({
+        where:{
+            city:city
+        },
+        order:[
+            ["clicks","DESC"]
+        ],
+        order:[
+            ["visitors","DESC"]
+        ],
+        limit:limit,
+        offset: (curPage - 1) * limit
+    }).then(result=>{
+        console.log(JSON.stringify(result));
+        let allGoods = result.rows,
+            count = result.count;
         return  {list: allGoods, total: Math.ceil(count/limit), count: count};
     });
 };

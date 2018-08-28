@@ -54,6 +54,7 @@ app.get('/se/area/provinces', ControllerProvinces.getProvinces);//citys
 //-- se
 app.get('/se/get/citys/by/province/:province', ControllerSe.getCitys);
 app.get('/se/goods/list/:curPage/:limit', ControllerSe.getGoodsList);
+app.get('/se/goods/list/by/city/:city/:curPage/:limit', ControllerSe.getGoodsListByCity);
 ControllerFile.uploadFile(app);//上传图片
 app.post('/se/goods/create', app.oauth.authenticate(), ControllerSe.createGoods);
 app.get('/se/goods/list/item/private/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivate);

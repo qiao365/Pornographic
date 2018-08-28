@@ -8,18 +8,12 @@ const ModelEthListener = require("../models/eth.listener");
 const createdAt = {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW,
-    field: "created_at",
-    get() {
-        return getDate.call(this, 'createdAt');
-    }
+    field: "created_at"
 }
 
 const updatedAt = {
     type: Sequelize.DATE,
-    field: "updated_at",
-    get() {
-        return getDate.call(this, 'updatedAt');
-    }
+    field: "updated_at"
 }
 
 function getDate(field, tz) {
@@ -127,11 +121,6 @@ model.DomainGoods = sequelize.define("t_do_goods", {
         type: Sequelize.INTEGER,
         field: "visitors",
         defaultValue:1
-    },
-    clicks:{
-        type: Sequelize.INTEGER,
-        field: "clicks",
-        defaultValue:0
     },
     price:{
         type: Sequelize.STRING,
