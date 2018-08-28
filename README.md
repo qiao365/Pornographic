@@ -1,11 +1,11 @@
-##数据
+## 数据
   * createuser -P qingyise -U postgres
   * createdb -O qingyise qingyise -U postgres
   
 ## ip port
   *192.168.1.25:8100
 
-##不需要登录
+## 不需要登录
   * 1.图形验证码 get
   * se/account/recaptcha/captcha.svg
 
@@ -23,7 +23,7 @@
 
    * body：username／password／grant_type=password／captcha
 
-##需要登录
+## 需要登录
    * 1.获取商品私密信息 get，购买则返回信息，无购买则返回提示信息
    * se/goods/list/item/private/:id
 
