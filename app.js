@@ -52,7 +52,7 @@ app.get('/qingyi/account/recaptcha/captcha.svg', ControllerAccount.getCaptcha);
 app.get('/qingyi/area/provinces', ControllerProvinces.getProvinces);//citys
 
 //-- se
-app.get('/qingyi/get/citys/by/province/:province', ControllerSe.getCitys);
+app.get('/qingyi/get/citys/by/city/:city', ControllerSe.getCitys);
 app.get('/qingyi/goods/list/:curPage/:limit', ControllerSe.getGoodsList);
 app.get('/qingyi/goods/list/by/city/:city/:curPage/:limit', ControllerSe.getGoodsListByCity);
 app.get('/qingyi/goods/list/item/details/:id', ControllerSe.getGoodsItemDetails);

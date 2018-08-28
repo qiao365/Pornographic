@@ -117,6 +117,10 @@ model.DomainGoods = sequelize.define("t_do_goods", {
         type: Sequelize.STRING,
         field: "city"
     },
+    area:{
+        type: Sequelize.STRING,
+        field: "area"
+    },
     brief:{
         type: Sequelize.STRING,
         field: "brief"

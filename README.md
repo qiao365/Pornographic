@@ -14,7 +14,7 @@
 
 
   * 3.获取列表 get by 城市 如：石景山
-  * /qingyi/goods/list/by/city/:city/:curPage/:limit
+  * /qingyi/goods/list/by/area/:area/:curPage/:limit
 
   * 4.获取商品详情 get by id
   * qingyi/goods/list/item/details/:id
@@ -30,8 +30,16 @@
 
   * body：username／password／grant_type=password／captcha
 
-  * 7. 省份／城市 get
+  * 7. 省份／市／区域 get
   * /qingyi/area/provinces
+
+  * 8. 忘记密码  post
+  * qingyi/account/fogetpass
+  * body :  {account:account}
+
+  * 9.根据城市获取区域 get  如：石家庄 返回：桥西区／桥东区 等
+  * qingyi/get/citys/by/city/:city 
+
 
 ## 需要登录
    * 1.获取商品私密信息 get，购买则返回信息，无购买则返回提示信息
@@ -40,7 +48,7 @@
    * 2.购买商品 get, 购买成功后，直接返回私密信息，余额不足则返回余额不足
    * /qingyi/goods/list/item/private/bybuy/:id
 
-   * 4.上传图片 post
+   * 3.上传图片 post
    * /qingyi/file/upload
 
    * header:
@@ -49,7 +57,7 @@
     *  avatar:file
    * }
 
-   * 5.上传商品信息 post
+   * 4.上传商品信息 post
    *  /qingyi/goods/create
    * body：
  ```javascript
@@ -71,7 +79,7 @@
     wechat:
 ```
 
-  * 6.个人中心-》eth打币地址 get，有地址则返回，没有 则 isSuccess:false
+  * 5.个人中心-》eth打币地址 get，有地址则返回，没有 则 isSuccess:false
   * /qingyi/account/dobi/detailed
 
 
