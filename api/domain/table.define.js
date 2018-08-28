@@ -136,7 +136,8 @@ model.DomainGoods = sequelize.define("t_do_goods", {
     },
     seePrice:{
         type: Sequelize.INTEGER,
-        field: "see_price"
+        field: "see_price",
+        defaultValue:0
     },
     serviceTime:{
         type: Sequelize.DATE,

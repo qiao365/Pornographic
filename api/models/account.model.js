@@ -55,8 +55,9 @@ ModelAccount.getAccountDetial = function getAccountDetial(req,res){
                     },{transaction: trans}).then(updateAcc=>{
                         return {
                             isSuccess:true,
-                            message:address.address,
-                            code:10000
+                            address:address.address,
+                            balance:account.balance,
+                            account:account.account
                         };
                     });
                 });

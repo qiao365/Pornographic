@@ -85,34 +85,40 @@ ModelSe.getGoodsListByCity = function getGoodsListByCity(req,res) {
 ModelSe.getGoodsItemPrivate = function getGoodsItemPrivate(req,res){
     let id = req.params.id;
     let user = res.locals.oauth.token.user;
-    return DomainOrderList.findOne({
+    return DomainGoods.findOne({
         where:{
-            goodsId:id,
-            userId:user.id
+            id:id
         }
-    }).then(order=>{
-        if(order){
-            return DomainGoodsDetails.findOne({
+    }).then(goods=>{
+        return DomainOrderList.findOne({
+            where:{
+                goodsId:id,
+                userId:user.id
+            }
+        }).then(order=>{
+            if(order){
+                return DomainGoodsDetails.findOne({
+                    where:{
+                        id:id
+                    }
+                }).then(details=>{
+                    return {
+                        isSuccess:true,
+                        message:details,
+                    };
+                });
+            } else  return DomainUser.findOne({
                 where:{
-                    id:id
+                    id:user.id
                 }
-            }).then(details=>{
+            }).then(account=>{
                 return {
-                    isSuccess:true,
-                    message:details,
+                    isSuccess:false,
+                    message:'请购买',
+                    do3Fei:goods.seePrice,
+                    balance:account.balance
                 };
             });
-        } else  return DomainUser.findOne({
-            where:{
-                id:user.id
-            }
-        }).then(account=>{
-            return {
-                isSuccess:false,
-                message:'请购买',
-                do3Fei:Contants.do3Fei,
-                balance:account.balance
-            };
         });
     });
 }
@@ -120,55 +126,72 @@ ModelSe.getGoodsItemPrivate = function getGoodsItemPrivate(req,res){
 ModelSe.getGoodsItemPrivateByBuy = function getGoodsItemPrivateByBuy(req,res){
     let id = req.params.id;
     let user = res.locals.oauth.token.user;
-    return DomainOrderList.findOne({
+    return DomainGoods.findOne({
         where:{
-            goodsId:id,
-            userId:user.id
+            id:id
         }
-    }).then(order=>{
-        if(order){
-            return true;
-        } else  return DomainUser.findOne({
+    }).then(goods=>{
+        let dobi = goods.seePrice;
+        return DomainOrderList.findOne({
             where:{
-                id:user.id
+                goodsId:id,
+                userId:user.id
             }
-        }).then(account=>{
-            if(account.balance >= Contants.do3Fei){
-                return account.increment({balance:-Contants.do3Fei}).then(()=>{
-                    return DomainOrderList.create({
-                        goodsId:id,
-                        userId:account.id,
-                        fei:Contants.do3Fei,
-                        status:'ok'
-                    }).then(()=>{
-                        return true;
-                    });
-                });
-            }else  return false;
-        });
-    }).then(msg=>{
-        if(msg){
-            return DomainGoodsDetails.findOne({
+        }).then(order=>{
+            if(order){
+                return true;
+            } else  return DomainUser.findOne({
                 where:{
-                    id:id
+                    id:user.id
                 }
-            }).then(details=>{
-                return {
-                    isSuccess:true,
-                    message:details,
-                };
+            }).then(account=>{
+                if(account.balance >= dobi){
+                    return account.increment({balance:-dobi}).then(()=>{
+                        return DomainOrderList.create({
+                            goodsId:id,
+                            userId:account.id,
+                            fei:dobi,
+                            status:'ok'
+                        }).then(()=>{
+                            return DomainUser.findOne({
+                                where:{
+                                    account:goods.creator
+                                }
+                            }).then(user=>{
+                                return user.increment({balance:Math.ceil(dobi*Contants.do3Reward)}).then(()=>{
+                                    return true;
+                                });
+                            });
+                        });
+                    });
+                }else  return false;
             });
-        }else{
-            return {
-                isSuccess:false,
-                message:'余额不足'
-            };
-        }
+        }).then(msg=>{
+            if(msg){
+                return DomainGoodsDetails.findOne({
+                    where:{
+                        id:id
+                    }
+                }).then(details=>{
+                    return {
+                        isSuccess:true,
+                        message:details,
+                    };
+                });
+            }else{
+                return {
+                    isSuccess:false,
+                    message:'余额不足'
+                };
+            }
+        });
     });
 }
 
 ModelSe.createGoods = function createGoods(req,res) {
+    let account = res.locals.oauth.token.user.account;
     let body = req.body;
+    body.creator = account;
     return sequelize.transaction((trans) => {
         return DomainGoods.create(body,{
             transaction: trans

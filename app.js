@@ -46,7 +46,7 @@ app.post('/qingyi/account/login', ControllerAccount.verify, app.oauth.token(toke
 app.post('/qingyi/account/refresh', app.oauth.token(tokenValidTime));//token refresh
 app.post('/qingyi/account/register', ControllerAccount.Register);
 app.post('/qingyi/account/fogetpass', ControllerAccount.Fogetpass);
-app.get('/qingyi/account/dobi/detailed', app.oauth.authenticate(), ControllerAccount.getAccountDetial);
+app.get('/qingyi/account/dobi/detailed', app.oauth.authenticate(), ControllerAccount.getAccountDetial);//账户信息
 app.get('/qingyi/account/recaptcha/captcha.svg', ControllerAccount.getCaptcha);
 
 app.get('/qingyi/area/provinces', ControllerProvinces.getProvinces);//citys
@@ -54,7 +54,7 @@ app.get('/qingyi/area/provinces', ControllerProvinces.getProvinces);//citys
 //-- se
 app.get('/qingyi/get/citys/by/city/:city', ControllerSe.getCitys);
 app.get('/qingyi/goods/list/:curPage/:limit', ControllerSe.getGoodsList);
-app.get('/qingyi/goods/list/by/city/:city/:curPage/:limit', ControllerSe.getGoodsListByCity);
+app.get('/qingyi/goods/list/by/area/:area/:curPage/:limit', ControllerSe.getGoodsListByCity);
 app.get('/qingyi/goods/list/item/details/:id', ControllerSe.getGoodsItemDetails);
 ControllerFile.uploadFile(app);//上传图片
 app.post('/qingyi/goods/create', app.oauth.authenticate(), ControllerSe.createGoods);

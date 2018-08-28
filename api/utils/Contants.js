@@ -1,4 +1,4 @@
 module.exports = {
-	do3Fei:2000,
+	do3Reward:0.5,
 	ethToDo:20000
 }
