@@ -12,18 +12,25 @@
   * 2.获取列表 get
   * /qingyi/goods/list/:curPage/:limit
 
-  * 3.注册 post
+
+  * 3.获取列表 get by 城市 如：石景山
+  * /qingyi/goods/list/by/city/:city/:curPage/:limit
+
+  * 4.获取商品详情 get by id
+  * qingyi/goods/list/item/details/:id
+
+  * 5.注册 post
   * /qingyi/account/register
   * body： account/password/tip/captcha
 
-  * 4.登录 post
+  * 6.登录 post
   * /qingyi/account/login
   * header：
   * Authorization：Basic cWluZ3lpc2U6Z1gxZkJhdDNiVg==
 
   * body：username／password／grant_type=password／captcha
 
-  * 5. 省份／城市 get
+  * 7. 省份／城市 get
   * /qingyi/area/provinces
 
 ## 需要登录
