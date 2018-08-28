@@ -5,7 +5,7 @@ utils.getProvinces = function getProvinces(){
 }
 
 let provincesJson = {
-    "provinces": [
+    "china": [
         {
             "citys": [
                 {

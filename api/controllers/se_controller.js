@@ -54,3 +54,14 @@ ControllerSe.getGoodsItemPrivateByBuy = function getGoodsItemPrivateByBuy(req, r
         res.json("error");
     });
 };
+
+ControllerSe.getCitys = function getCitys(req, res){
+    ModelSe.getCitys(req, res).then((data)=>{
+        res.status(200);
+        res.json(data);
+    }).catch((error) => {
+        console.error(error);
+        res.status(500);
+        res.json("error");
+    });
+};

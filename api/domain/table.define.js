@@ -108,15 +108,16 @@ model.DomainGoods = sequelize.define("t_do_goods", {
     },
     country:{
         type: Sequelize.STRING,
-        field: "country"
+        field: "country",
+        defaultValue:'china'
+    },
+    province:{
+        type: Sequelize.STRING,
+        field: "province"
     },
     city:{
         type: Sequelize.STRING,
         field: "city"
-    },
-    area:{
-        type: Sequelize.STRING,
-        field: "area"
     },
     brief:{
         type: Sequelize.STRING,
@@ -135,6 +136,10 @@ model.DomainGoods = sequelize.define("t_do_goods", {
     price:{
         type: Sequelize.STRING,
         field: "price"
+    },
+    seePrice:{
+        type: Sequelize.INTEGER,
+        field: "see_price"
     },
     serviceTime:{
         type: Sequelize.DATE,

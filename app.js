@@ -52,6 +52,7 @@ app.get('/se/account/recaptcha/captcha.svg', ControllerAccount.getCaptcha);
 app.get('/se/area/provinces', ControllerProvinces.getProvinces);//citys
 
 //-- se
+app.get('/se/get/citys/by/province/:province', ControllerSe.getCitys);
 app.get('/se/goods/list/:curPage/:limit', ControllerSe.getGoodsList);
 ControllerFile.uploadFile(app);//上传图片
 app.post('/se/goods/create', app.oauth.authenticate(), ControllerSe.createGoods);

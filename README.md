@@ -48,9 +48,10 @@
  ```javascript
     name: 
     age:
-    country:
+    country:china
+    province:
     city:
-    area:
+    seePrice: 游客看一次的单价
     brief:
     price:
     serviceTime:

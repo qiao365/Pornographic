@@ -9,6 +9,20 @@ const Contants = require('../utils/Contants');
 const DomainGoodsDetails = TABLE_DEFINE.DomainGoodsDetails;
 var ModelSe = module.exports;
 
+
+ModelSe.getCitys = function getCitys(req,res){
+    let province = req.params.province;
+    return DomainGoods.findAll({
+        attributes:["city"],
+        where:{
+            province:province
+        },
+        group:["city"]
+    }).then(all=>{
+        return all;
+    });
+}
+
 /**
  * 获取 GOODS LIST
  */
