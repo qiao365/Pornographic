@@ -47,7 +47,7 @@ app.post('/qingyi/account/refresh', app.oauth.token(tokenValidTime));//token ref
 app.post('/qingyi/account/register', ControllerAccount.Register);
 app.post('/qingyi/account/fogetpass', ControllerAccount.Fogetpass);
 app.get('/qingyi/account/dobi/detailed', app.oauth.authenticate(), ControllerAccount.getAccountDetial);//账户信息
-app.get('/qingyi/account/recaptcha/captcha.svg', ControllerAccount.getCaptcha);
+app.get('/qingyi/account/recaptcha/captcha.jpg', ControllerAccount.getCaptcha);
 
 app.get('/qingyi/area/provinces', ControllerProvinces.getProvinces);//citys
 

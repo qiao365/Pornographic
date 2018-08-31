@@ -7,7 +7,7 @@
 
 ## 不需要登录
   * 1.图形验证码 get
-  * /qingyi/account/recaptcha/captcha.svg
+  * /qingyi/account/recaptcha/captcha.jpg
 
   * 2.获取列表 get
   * /qingyi/goods/list/:curPage/:limit

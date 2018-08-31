@@ -5,7 +5,7 @@ const Table = require('../domain/table.define');
 const DomainUser = Table.DomainUser;
 const redis = require('../domain/se.prepare').redis;
 const DomainDoAddress = Table.DomainDoAddress;
-const svgCaptcha = require('svg-captcha');
+const captcha = require('trek-captcha')
 const KEYS = require('../models/oauth2.model').KEYS;
 var ModelAccount = module.exports;
 
@@ -129,18 +129,17 @@ ModelAccount.Register = function Register(req,res){
 };
 
 ModelAccount.getCaptcha = function getCaptcha(req,res){
-    let opt = {
-        size:3,
-        ignoreChars: '0o1i', // 验证码字符中排除 0o1i
-        noise: 2, // 干扰线条的数量
-        color: true, // 验证码的字符是否有颜色，默认没有，如果设定了背景，则默认有
-        background: '#ffffff' // 验证码图片背景颜色
-    };
-    var captcha = svgCaptcha.createMathExpr(opt);   
-    console.log(captcha.text);
-    req.session.captcha = captcha.text;
-	res.type('svg'); // 使用ejs等模板时如果报错 res.type('html')
-	res.status(200).send(captcha.data); 
+    getCaptchaF(req,res);
+}
+
+async function getCaptchaF(req,res) {
+    const { token, buffer } = await captcha({ size: 4, style: -1 })
+    // console.log( token, buffer);
+    req.session.captcha = token;
+    res.writeHead(200, {
+        'Content-Type': 'image/jpg'
+    });
+	res.end(buffer); 
 }
 
 ModelAccount.verify = function verify(req,res,next){
