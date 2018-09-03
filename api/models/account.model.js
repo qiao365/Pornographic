@@ -7,6 +7,7 @@ const redis = require('../domain/se.prepare').redis;
 const DomainDoAddress = Table.DomainDoAddress;
 const captcha = require('trek-captcha')
 const KEYS = require('../models/oauth2.model').KEYS;
+const Contants = require('../utils/Contants');
 var ModelAccount = module.exports;
 
 ModelAccount.getAccountDetial = function getAccountDetial(req,res){
@@ -25,8 +26,11 @@ ModelAccount.getAccountDetial = function getAccountDetial(req,res){
             }).then(address=>{
                 return {
                     isSuccess:true,
-                    message:address.address,
-                    code:10000
+                    address:address.address,
+                    balance:account.balance,
+                    account:account.account,
+                    minEth:Contants.minEth,
+                    ethToDo:Contants.ethToDo
                 };
             });
         }
@@ -42,8 +46,11 @@ ModelAccount.getAccountDetial = function getAccountDetial(req,res){
                 if(!address){
                     return {
                         isSuccess:false,
-                        message:"地址池不足，请联系管理员",
-                        code:10001
+                        address:'',
+                        balance:account.balance,
+                        account:account.account,
+                        minEth:Contants.minEth,
+                        ethToDo:Contants.ethToDo
                     };
                 }
                 return address.update({
@@ -57,7 +64,9 @@ ModelAccount.getAccountDetial = function getAccountDetial(req,res){
                             isSuccess:true,
                             address:address.address,
                             balance:account.balance,
-                            account:account.account
+                            account:account.account,
+                            minEth:Contants.minEth,
+                            ethToDo:Contants.ethToDo
                         };
                     });
                 });
