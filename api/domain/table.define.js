@@ -139,6 +139,10 @@ model.DomainGoods = sequelize.define("t_do_goods", {
         field: "see_price",
         defaultValue:0
     },
+    face:{
+        type: Sequelize.STRING,
+        field: "face"
+    },
     serviceTime:{
         type: Sequelize.DATE,
         field: "servicetime"

@@ -103,23 +103,29 @@ ModelSe.getGoodsItemPrivate = function getGoodsItemPrivate(req,res){
                         id:id
                     }
                 }).then(details=>{
-                    return {
+                    return [true,{
                         isSuccess:true,
-                        message:details,
-                    };
+                        message:"已支付",
+                        qq:details.qq,
+                        wechat:details.wechat,
+                        tel:details.tel,
+                        do3Fei:goods.seePrice
+                    }];
                 });
-            } else  return DomainUser.findOne({
-                where:{
-                    id:user.id
-                }
-            }).then(account=>{
-                return {
-                    isSuccess:false,
-                    message:'请购买',
-                    do3Fei:goods.seePrice,
-                    balance:account.balance
-                };
-            });
+            } else  return [false,{
+                isSuccess:false,
+                message:'请购买',
+                do3Fei:goods.seePrice
+            }];
+        });
+    }).then(([bool,data])=>{
+        return DomainUser.findOne({
+            where:{
+                id:user.id
+            }
+        }).then(account=>{
+            data.balance = account.balance;
+            return data;
         });
     });
 }
@@ -176,7 +182,10 @@ ModelSe.getGoodsItemPrivateByBuy = function getGoodsItemPrivateByBuy(req,res){
                 }).then(details=>{
                     return {
                         isSuccess:true,
-                        message:details,
+                        message:"已支付",
+                        qq:details.qq,
+                        wechat:details.wechat,
+                        tel:details.tel
                     };
                 });
             }else{
