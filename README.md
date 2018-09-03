@@ -8,13 +8,15 @@
 ## 不需要登录
   * 1.图形验证码 get
   * /qingyi/account/recaptcha/captcha.jpg
+  * body:{}
 
-  * 2.获取列表 get
+  * 2.获取列表 post
   * /qingyi/goods/list/:curPage/:limit
 
 
-  * 3.获取列表 get by 城市 如：石景山
-  * /qingyi/goods/list/by/area/:area/:curPage/:limit
+  * 3.获取列表 post by 城市 如：石景山
+  * /qingyi/goods/list/by/area/:curPage/:limit
+  * body:{"area":area}
 
   * 4.获取商品详情 get by id
   * qingyi/goods/list/item/details/:id
@@ -70,6 +72,7 @@
     seePrice: 游客看一次的单价
     brief:
     price:
+    visitors
     serviceTime:
     service:
     describe:

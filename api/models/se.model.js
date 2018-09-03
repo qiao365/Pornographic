@@ -11,13 +11,14 @@ var ModelSe = module.exports;
 
 
 ModelSe.getCitys = function getCitys(req,res){
-    let city = req.params.city;
+    let city = req.body.city;
+    console.log(city);
     return DomainGoods.findAll({
         attributes:["area"],
         where:{
             city:city
         },
-        group:["city"]
+        group:["area"]
     }).then(all=>{
         return all;
     });
@@ -61,7 +62,7 @@ ModelSe.getGoodsItemDetails = function getGoodsItemDetails(req,res) {
 ModelSe.getGoodsListByCity = function getGoodsListByCity(req,res) {
     let curPage = req.params.curPage;
     let limit = req.params.limit;
-    let area = req.params.area;
+    let area = req.body.area;
     return DomainGoods.findAndCount({
         where:{
             area:area

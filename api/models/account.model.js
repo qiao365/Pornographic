@@ -134,7 +134,7 @@ ModelAccount.getCaptcha = function getCaptcha(req,res){
 
 async function getCaptchaF(req,res) {
     const { token, buffer } = await captcha({ size: 4, style: -1 })
-    // console.log( token, buffer);
+    console.log( token, buffer);
     req.session.captcha = token;
     res.writeHead(200, {
         'Content-Type': 'image/jpg'
@@ -145,6 +145,7 @@ async function getCaptchaF(req,res) {
 ModelAccount.verify = function verify(req,res,next){
     let body = req.body;
     let captcha = req.session && req.session.captcha;
+    console.log(body.captcha,captcha);
    if(!captcha || body.captcha != captcha){
     res.status(200).send({
         isSuccess:false,

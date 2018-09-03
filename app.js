@@ -52,9 +52,9 @@ app.get('/qingyi/account/recaptcha/captcha.jpg', ControllerAccount.getCaptcha);
 app.get('/qingyi/area/provinces', ControllerProvinces.getProvinces);//citys
 
 //-- se
-app.get('/qingyi/get/citys/by/city/:city', ControllerSe.getCitys);
-app.get('/qingyi/goods/list/:curPage/:limit', ControllerSe.getGoodsList);
-app.get('/qingyi/goods/list/by/area/:area/:curPage/:limit', ControllerSe.getGoodsListByCity);
+app.post('/qingyi/get/citys/by/city', ControllerSe.getCitys);
+app.post('/qingyi/goods/list/:curPage/:limit', ControllerSe.getGoodsList);
+app.post('/qingyi/goods/list/by/area/:curPage/:limit', ControllerSe.getGoodsListByCity);
 app.get('/qingyi/goods/list/item/details/:id', ControllerSe.getGoodsItemDetails);
 ControllerFile.uploadFile(app);//上传图片
 app.post('/qingyi/goods/create', app.oauth.authenticate(), ControllerSe.createGoods);
