@@ -12,11 +12,10 @@ var ModelSe = module.exports;
 
 ModelSe.getCitys = function getCitys(req,res){
     let city = req.body.city;
-    console.log(city);
     return DomainGoods.findAll({
         attributes:["area"],
         where:{
-            city:city
+            city:{$like:`%${city}%`}
         },
         group:["area"]
     }).then(all=>{
@@ -65,7 +64,7 @@ ModelSe.getGoodsListByCity = function getGoodsListByCity(req,res) {
     let area = req.body.area;
     return DomainGoods.findAndCount({
         where:{
-            area:area
+            area:{$like:`%${area}%`}
         },
         order:[
             ["clicks","DESC"]
