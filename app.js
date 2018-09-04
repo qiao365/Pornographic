@@ -8,6 +8,7 @@ const ControllerFile = require("./api/controllers/file_controller");
 const ControllerSe = require("./api/controllers/se_controller");
 const ControllerAccount = require("./api/controllers/account_controller");
 const ControllerProvinces = require("./api/controllers/provinces_controller");
+const AppCheckVersion = require("./api/controllers/appversion_controller");
 const tokenValidTime = {accessTokenLifetime: 7 * 24 * 60 * 60,refreshTokenLifetime: 7 * 24 * 60 * 60 * 1.5};
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
@@ -62,7 +63,7 @@ app.post('/qingyi/goods/create', app.oauth.authenticate(), ControllerSe.createGo
 app.get('/qingyi/goods/list/item/private/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivate);
 app.get('/qingyi/goods/list/item/private/bybuy/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivateByBuy);
 app.get('/qingyi/goods/history/:curPage/:limit', app.oauth.authenticate(), ControllerAccount.getHistory);
-
+app.get('/qingyi/app/appcheck/version', AppCheckVersion.checkversion);//app  version
 //-- authed end
 
 var port = process.env.PORT || 8100;

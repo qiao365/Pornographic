@@ -1,0 +1,16 @@
+{
+	"android": {
+		"version": "0.1.0",
+		"versionCode": "10",
+		"updateContent": "1.修复一些Bug问题\n2.修复bug\n",
+		"updateUrl": "http://ap2.5uwifi.com/public/wakuang/apk/mobipromo-app.apk",
+		"mustUpdate": true
+	},
+	"iOS": {
+		"version": "0.1.0",
+		"versionCode": "10",
+		"updateContent": "1.版本升级\n2.修复bug问题\n",
+		"updateUrl": "https://itunes.apple.com/cn/app/%E5%B7%A5%E9%93%B6e%E6%8A%95%E8%B5%84/id945893649?mt=8",
+		"mustUpdate": true
+	}
+}

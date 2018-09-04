@@ -46,15 +46,12 @@ var ModelFile = module.exports;
 
 ModelFile.upload  = function upload(app) {
     //上传文件
-    app.post("/se/file/upload", uploadMulter.single('avatar'),function(req,res){
+    app.post("/qingyi/file/upload", uploadMulter.single('avatar'),function(req,res){
         const {originalname,filename} = req.file;
         res.status(200);
         res.json({
             isSuccess: true,
-            data:{
-                oriFileName:originalname,
-                filePath:filename,
-            },
+            filePath:filename,
             message:"上传成功"
         });
     });
