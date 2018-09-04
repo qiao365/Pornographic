@@ -5,6 +5,8 @@ const Table = require('../domain/table.define');
 const DomainUser = Table.DomainUser;
 const redis = require('../domain/se.prepare').redis;
 const DomainDoAddress = Table.DomainDoAddress;
+const DomainGoods = Table.DomainGoods;
+const DomainOrderList = Table.DomainOrderList;
 const captcha = require('trek-captcha')
 const KEYS = require('../models/oauth2.model').KEYS;
 const Contants = require('../utils/Contants');
@@ -163,5 +165,35 @@ ModelAccount.verify = function verify(req,res,next){
     });
    }else next();
 }
+
+ModelAccount.getHistory = function getHistory(req,res){
+    let user = res.locals.oauth.token.user;
+    let curPage = req.params.curPage;
+    let limit = req.params.limit;
+
+    return DomainUser.findOne({
+        where:{
+            account:user.account
+        }
+    }).then(account=>{
+        return DomainGoods.findAndCount({
+            include: [
+				{
+					model: DomainOrderList,
+					as: 'goodsOrder',
+					where: {
+						userId:user.id
+                    }
+                }
+            ],
+            limit:limit,
+            offset: (curPage - 1) * limit
+        }).then(result=>{
+            let allGoods = result.rows,
+                count = result.count;
+            return  {list: allGoods, total: Math.ceil(count/limit), count: count};
+        });
+    });
+};
 
 module.exports = ModelAccount;

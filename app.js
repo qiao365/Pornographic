@@ -52,6 +52,7 @@ app.get('/qingyi/account/recaptcha/captcha.jpg', ControllerAccount.getCaptcha);
 app.get('/qingyi/area/provinces', ControllerProvinces.getProvinces);//citys
 
 //-- se
+app.get('/qingyi/account/loginout', app.oauth.token(tokenValidTime), ControllerAccount.logOut);
 app.post('/qingyi/get/citys/by/city', ControllerSe.getCitys);
 app.post('/qingyi/goods/list/:curPage/:limit', ControllerSe.getGoodsList);
 app.post('/qingyi/goods/list/by/area/:curPage/:limit', ControllerSe.getGoodsListByCity);
@@ -60,7 +61,7 @@ ControllerFile.uploadFile(app);//上传图片
 app.post('/qingyi/goods/create', app.oauth.authenticate(), ControllerSe.createGoods);
 app.get('/qingyi/goods/list/item/private/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivate);
 app.get('/qingyi/goods/list/item/private/bybuy/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivateByBuy);
-
+app.get('/qingyi/goods/history/:curPage/:limit', app.oauth.authenticate(), ControllerAccount.getHistory);
 
 //-- authed end
 
