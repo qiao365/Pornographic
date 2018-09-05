@@ -31,9 +31,6 @@ ModelSe.getGoodsList = function getGoodsList(req,res) {
     let limit = req.params.limit;
     return DomainGoods.findAndCount({
         order:[
-            ["clicks","DESC"]
-        ],
-        order:[
             ["visitors","DESC"]
         ],
         limit:limit,
