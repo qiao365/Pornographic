@@ -93,7 +93,7 @@ ModelSe.getGoodsItemPrivate = function getGoodsItemPrivate(req,res){
                 userId:user.id
             }
         }).then(order=>{
-            if(order){
+            if(order || goods.creator == user.account){
                 return DomainGoodsDetails.findOne({
                     where:{
                         id:id
@@ -159,7 +159,7 @@ ModelSe.getGoodsItemPrivateByBuy = function getGoodsItemPrivateByBuy(req,res){
                             return DomainUser.findOne({
                                 where:{
                                     account:goods.creator
-                                }
+                                    }
                             }).then(user=>{
                                 return user.increment({balance:Math.ceil(dobi*Contants.do3Reward)}).then(()=>{
                                     return true;
