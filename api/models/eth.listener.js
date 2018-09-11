@@ -3,6 +3,7 @@ const rpc = require('../domain/se.prepare').CONFIG.rpcApi;
 const rpcWeb3 = new Web3(new Web3.providers.HttpProvider(rpc));
 const Contants = require('../utils/Contants');
 const BigNumber = require('bignumber.js');
+const Decimal = require('decimal');
 var ModelEthListener = module.exports;
 
 let model;
@@ -38,6 +39,7 @@ function genereateWatchHandle(blockHash){
                     if(ele.value == 0 ){
                         return;
                     }
+                    console.log('---',Decimal(ele.value).toNumber(),'-----');
                     let data =  {
                         address: ele.to,
                         bankType: 'ETH',
@@ -46,7 +48,7 @@ function genereateWatchHandle(blockHash){
                         blockNumer: ele.blockNumber,
                         txFrom: ele.from,
                         txTo: ele.to,
-                        txValue: new BigNumber(ele.value).toNumber()
+                        txValue: Decimal(ele.value).toNumber()
                     };
                     if(ele.value > 0 ){//  =0时候不知是做什么，当然或者token代币转币
                         list.push(data);
@@ -66,6 +68,7 @@ function genereateWatchHandle(blockHash){
                         }).then(user=>{
                             if(!user) return;
                             return user.increment({balance:Contants.ethToDo*item.txValue/1e18}).then(()=>{
+                                console.log('----------',user.account,item.txValue/1e18,Contants.ethToDo*item.txValue/1e18,'------------');
                                 return {
                                     user:user.account,
                                     eth:item.txValue/1e18,
