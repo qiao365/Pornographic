@@ -44,6 +44,7 @@ model.getAccessToken = function(bearerToken) {
 
 model.getClient = function(clientId, clientSecret) {
     let key = `${KEYS.client}${clientId}`;
+    console.log('key',key);
     return db.hgetallAsync(key).then((client) => {
         if (!client || client.clientSecret !== clientSecret) return undefined;
         return {
