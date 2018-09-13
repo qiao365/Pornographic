@@ -25,7 +25,7 @@ bluebird.promisifyAll(redisdb.RedisClient.prototype);
 bluebird.promisifyAll(redisdb.Multi.prototype);
 redis.hmset(`${KEYS.client}${APP}`, {
     clientId: APP,
-    clientSecret: 'gX1fBat3bV'
+    clientSecret: 'ejj97205ba6fuuu'
 });
 const CONFIG = {
     rpcApi:'http://localhost:8545'
