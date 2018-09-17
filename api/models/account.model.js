@@ -196,6 +196,21 @@ ModelAccount.getHistory = function getHistory(req,res){
         });
     });
 };
+ModelAccount.iflike = function iflike(req, res){
+    let user = res.locals.oauth.token.user;
+    let goodsId = req.params.goodsId;
+    return DomainDoLike.findOne({
+        where:{
+            goodsId:goodsId,
+            account:user.account,
+            like:true
+        }
+    }).then(likedata=>{
+        if(likedata){
+            return {isSuccess:true}
+        } return {isSuccess:false}
+    });
+}
 
 //like
 ModelAccount.like = function like(req, res){
