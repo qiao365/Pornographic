@@ -203,6 +203,7 @@ model.DomainDoLike = sequelize.define("t_do_like", {
     },
     like:{
         type: Sequelize.BOOLEAN,
+        field: "iflike",
         defaultValue:true
     },
     createdAt: createdAt,

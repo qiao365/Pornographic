@@ -198,17 +198,18 @@ ModelAccount.getHistory = function getHistory(req,res){
 };
 ModelAccount.iflike = function iflike(req, res){
     let user = res.locals.oauth.token.user;
-    let goodsId = req.params.goodsId;
+    let id = req.params.goodsId * 1;
+    console.log(typeof(id),id,user.account);
     return DomainDoLike.findOne({
         where:{
-            goodsId:goodsId,
+            goodsId:id,
             account:user.account,
             like:true
         }
-    }).then(likedata=>{
-        if(likedata){
+    }).then(data=>{
+        if(data){
             return {isSuccess:true}
-        } return {isSuccess:false}
+        }else return {isSuccess:false}
     });
 }
 
@@ -217,42 +218,36 @@ ModelAccount.like = function like(req, res){
     let user = res.locals.oauth.token.user;
     let like = req.params.like;
     let goodsId = req.params.goodsId;
-    return sequelize.transaction((trans) => {
-        if(like == true){
-            return DomainDoLike.create({
-                goodsId:goodsId,
-                account:user.account,
-                like:true
-            },trans).then(data=>{
-                return DomainGoods.findOne({
-                    where:{
-                        id:goodsId
+    if(like === "true"){
+        return DomainDoLike.create({
+            goodsId:goodsId,
+            account:user.account,
+            like:true
+        }).then(data=>{
+            return DomainGoods.findOne({
+                where:{
+                    id:goodsId
+                }
+            }).then(goods=>{
+                return goods.increment({visitors:1}).then(inc=>{
+                    return {
+                        isSuccess:true
                     }
-                }).then(goods=>{
-                    return goods.increment({visitors:1},trans).then(inc=>{
-                        return {
-                            isSuccess:true
-                        }
-                    });
                 });
             });
-        }else{
-            return DomainDoLike.destroy({
-                where:{
-                    goodsId:goodsId,
-                    account:user.account
-                }
-            },trans).then(des=>{
-                return {
-                    isSuccess:true
-                }
-            });
-        }
-    }).catch(err=>{
-        return {
-            isSuccess:false
-        }
-    });
+        });
+    }else{
+        return DomainDoLike.destroy({
+            where:{
+                goodsId:goodsId,
+                account:user.account
+            }
+        }).then(des=>{
+            return {
+                isSuccess:true
+            }
+        });
+    }
 }
 
 module.exports = ModelAccount;
