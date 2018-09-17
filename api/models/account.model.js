@@ -7,6 +7,7 @@ const redis = require('../domain/se.prepare').redis;
 const DomainDoAddress = Table.DomainDoAddress;
 const DomainGoods = Table.DomainGoods;
 const DomainOrderList = Table.DomainOrderList;
+const DomainDoLike = Table.DomainDoLike;
 const captcha = require('trek-captcha')
 const KEYS = require('../models/oauth2.model').KEYS;
 const Contants = require('../utils/Contants');
@@ -195,5 +196,48 @@ ModelAccount.getHistory = function getHistory(req,res){
         });
     });
 };
+
+//like
+ModelAccount.like = function like(req, res){
+    let user = res.locals.oauth.token.user;
+    let like = req.params.like;
+    let goodsId = req.params.goodsId;
+    return sequelize.transaction((trans) => {
+        if(like == true){
+            return DomainDoLike.create({
+                goodsId:goodsId,
+                account:user.account,
+                like:true
+            },trans).then(data=>{
+                return DomainGoods.findOne({
+                    where:{
+                        id:goodsId
+                    }
+                }).then(goods=>{
+                    return goods.increment({visitors:1},trans).then(inc=>{
+                        return {
+                            isSuccess:true
+                        }
+                    });
+                });
+            });
+        }else{
+            return DomainDoLike.destroy({
+                where:{
+                    goodsId:goodsId,
+                    account:user.account
+                }
+            },trans).then(des=>{
+                return {
+                    isSuccess:true
+                }
+            });
+        }
+    }).catch(err=>{
+        return {
+            isSuccess:false
+        }
+    });
+}
 
 module.exports = ModelAccount;

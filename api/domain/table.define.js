@@ -190,6 +190,25 @@ model.DomainGoodsDetails = sequelize.define("t_do_goods_details", {
     updatedAt: updatedAt
 });
 
+model.DomainDoLike = sequelize.define("t_do_like", {
+    goodsId:{
+        type: Sequelize.INTEGER,
+        field: "goodsid",
+        allowNull: false,
+        primaryKey: true
+    },
+    account: {
+        type: Sequelize.STRING,
+        primaryKey: true
+    },
+    like:{
+        type: Sequelize.BOOLEAN,
+        defaultValue:true
+    },
+    createdAt: createdAt,
+    updatedAt: updatedAt
+});
+
 model.DomainGoods.hasOne(model.DomainGoodsDetails, {as: 'goodsDetails', foreignKey: 'goodsid'});
 
 //Order list

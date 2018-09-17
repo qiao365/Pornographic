@@ -63,6 +63,7 @@ app.post('/qingyi/goods/create', app.oauth.authenticate(), ControllerSe.createGo
 app.get('/qingyi/goods/list/item/private/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivate);
 app.get('/qingyi/goods/list/item/private/bybuy/:id', app.oauth.authenticate(), ControllerSe.getGoodsItemPrivateByBuy);
 app.get('/qingyi/goods/history/:curPage/:limit', app.oauth.authenticate(), ControllerAccount.getHistory);
+app.get('/qingyi/goods/like/:goodsId/:like', app.oauth.authenticate(), ControllerAccount.like); //like
 app.get('/qingyi/app/appcheck/version', AppCheckVersion.checkversion);//app  version
 //-- authed end
 
